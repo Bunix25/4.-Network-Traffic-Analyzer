@@ -1,6 +1,7 @@
 import csv
 from scapy.all import sniff
 from scapy.layers.inet import IP, TCP, UDP
+from scapy.config import conf
 
 def packet_callback(packet, writer):
     if IP in packet:
@@ -20,11 +21,16 @@ def packet_callback(packet, writer):
             writer.writerow([ip_src, '', ip_dst, '', 'IP'])
 
 def main():
+    interface = 'en0'  # Specify your interface here
+    print(f"Capturing packets on interface: {interface}")
+    
     with open('captured_packets.csv', 'w', newline='') as csvfile:
         fieldnames = ['Source IP', 'Source Port', 'Destination IP', 'Destination Port', 'Protocol']
         writer = csv.writer(csvfile)
         writer.writerow(fieldnames)
-        sniff(prn=lambda x: packet_callback(x, writer), count=50)
-
+        
+        # Sniff packets on the specified interface
+        sniff(prn=lambda x: packet_callback(x, writer), count=50, iface=interface)
+        
 if __name__ == "__main__":
     main()
