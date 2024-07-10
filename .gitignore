@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pyo
+captured_packets.csv
+.env
+.vscode/
+.idea/
