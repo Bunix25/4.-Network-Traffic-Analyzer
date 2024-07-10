@@ -35,9 +35,26 @@ def detect_anomalies(packets):
     for port, count in port_counts.items():
         print(f"Port: {port}, Count: {count}")
 
+def get_detailed_info(packets, timestamp, src_ip, src_port, dst_ip, dst_port, protocol):
+    found = False
+    for packet in packets:
+        print(f"Checking packet: {packet}")  # Debug: Print each packet being checked
+        if (packet['Timestamp'] == timestamp and packet['Source IP'] == src_ip and
+            packet['Source Port'] == src_port and packet['Destination IP'] == dst_ip and
+            packet['Destination Port'] == dst_port and packet['Protocol'] == protocol):
+            found = True
+            print(f"\nDetailed Packet Information for {timestamp}, {src_ip}, {src_port}, {dst_ip}, {dst_port}, {protocol}:")
+            print(packet['Packet Info'])
+            break
+    if not found:
+        print("No matching packet found.")
+
 def main():
     packets = read_packets('captured_packets.csv')
+    print(f"Total packets read: {len(packets)}")  # Debug: Print the total number of packets read
     detect_anomalies(packets)
+    # Replace with the specific data point you want to investigate
+    get_detailed_info(packets, '2024-07-10 13:11:13', '10.0.0.190', '62373', '20.189.173.15', '443', 'TCP')
 
 if __name__ == "__main__":
     main()
